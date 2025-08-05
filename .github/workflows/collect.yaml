@@ -3,7 +3,7 @@ on:
   # executed once a week on Sundays at 00:00
   schedule:
     #- cron: "0 0 * * 1"
-     - cron : "0 */8 * * *"
+     - cron : "0 */6 * * *"
   workflow_dispatch:
 
 concurrency:
