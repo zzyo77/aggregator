@@ -294,6 +294,9 @@ def verify(item: dict, mihomo: bool = True) -> bool:
     if not item or type(item) != dict or "type" not in item:
         return False
 
+    # remove dialer-proxy because target proxy maybe not exists
+    item.pop("dialer-proxy", None)
+
     try:
         # name must be string
         name = str(item.get("name", "")).strip()
@@ -589,15 +592,14 @@ def verify(item: dict, mihomo: bool = True) -> bool:
                             short_id = str(short_id)
                         else:
                             return False
-                    # if len(short_id) != 8 or not is_hex(short_id) or re.match(r"\d+e\d+", short_id, flags=re.I):
-                    #     return False
 
-                    try:
-                        sib = bytes.fromhex(short_id)
-                        if len(sib) > 8:
+                    if short_id:
+                        try:
+                            sib = bytes.fromhex(short_id)
+                            if len(sib) > 8:
+                                return False
+                        except ValueError:
                             return False
-                    except ValueError:
-                        return False
 
                     reality_opts["short-id"] = QuotedStr(short_id)
                 if "xhttp-opts" in item:
